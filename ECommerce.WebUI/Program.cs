@@ -1,3 +1,7 @@
+using ECommerce.Business.Abstract;
+using ECommerce.Business.Concrete;
+using ECommerce.DataAccess.Abstraction;
+using ECommerce.DataAccess.Concrete.EFEntityFramework;
 using ECommerce.Entities.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IProductDal, EFProductDal>();   
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var conn = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<NorthwindContext>(opt =>

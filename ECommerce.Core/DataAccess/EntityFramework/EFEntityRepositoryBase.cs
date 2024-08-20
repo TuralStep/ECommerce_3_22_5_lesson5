@@ -12,54 +12,46 @@ namespace ECommerce.Core.DataAccess.EntityFramework
     public class EFEntityRepositoryBase<TEntity, TContext>
         : IEntityRepository<TEntity>
         where TEntity : class, IEntity, new()
-        where TContext : DbContext, new()
+        where TContext : DbContext
     {
+        private readonly TContext context;
+
+        public EFEntityRepositoryBase(TContext context)
+        {
+            this.context = context;
+        }
+
         public async Task Add(TEntity entity)
         {
-            using (var context=new TContext())
-            {
-                var addedEntity = context.Entry(entity);
-                addedEntity.State = EntityState.Added;
-                await context.SaveChangesAsync();
-            }
+            var addedEntity = context.Entry(entity);
+            addedEntity.State = EntityState.Added;
+            await context.SaveChangesAsync();
         }
 
         public async Task Delete(TEntity entity)
         {
-            using (var context=new TContext())
-            {
-                var deletedEntity = context.Entry(entity);
-                deletedEntity.State = EntityState.Deleted;  
-                await context.SaveChangesAsync();
-            }
+            var deletedEntity = context.Entry(entity);
+            deletedEntity.State = EntityState.Deleted;
+            await context.SaveChangesAsync();
         }
 
         public async Task<TEntity> Get(Expression<Func<TEntity, bool>> filter)
         {
-            using (var context=new TContext())
-            {
-                return await context.Set<TEntity>().SingleOrDefaultAsync(filter);
-            }
+            return await context.Set<TEntity>().SingleOrDefaultAsync(filter);
         }
 
         public async Task<List<TEntity>> GetList(Expression<Func<TEntity, bool>> filter = null)
         {
-            using (var context=new TContext())
-            {
-                return filter==null?
-                    await context.Set<TEntity>().ToListAsync():
-                    await context.Set<TEntity>().Where(filter).ToListAsync();
-            }
+            return filter == null ?
+                await context.Set<TEntity>().ToListAsync() :
+                await context.Set<TEntity>().Where(filter).ToListAsync();
         }
 
         public async Task Update(TEntity entity)
         {
-            using(var context=new TContext())
-            {
-                var updatedEntity = context.Entry(entity);
-                updatedEntity.State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }
+            var updatedEntity = context.Entry(entity);
+            updatedEntity.State = EntityState.Modified;
+            await context.SaveChangesAsync();
         }
     }
 }
