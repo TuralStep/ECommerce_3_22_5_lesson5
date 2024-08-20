@@ -20,7 +20,7 @@ namespace ECommerce.WebUI.TagHelpers
             output.TagName = "section";
 
             var sb = new StringBuilder();
-            if (PageSize > 1)
+            if (PageCount > 1)
             {
                 sb.Append("<ul class='pagination'>");
 
