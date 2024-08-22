@@ -3,6 +3,7 @@ using ECommerce.Business.Concrete;
 using ECommerce.DataAccess.Abstraction;
 using ECommerce.DataAccess.Concrete.EFEntityFramework;
 using ECommerce.Entities.Models;
+using ECommerce.WebUI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,10 +11,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 builder.Services.AddScoped<IProductDal, EFProductDal>();   
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICategoryDal, EFCategoryDal>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICartSessionService, CartSessionService>();
+
 builder.Services.AddSession();
 
 
