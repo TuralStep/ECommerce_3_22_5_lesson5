@@ -15,21 +15,38 @@ namespace ECommerce.WebUI.Controllers
         }
 
         // GET: ProductController
-        public async Task<ActionResult> Index(int page = 1, int category = 0)
+        public async Task<ActionResult> Index(int page = 1, int category = 0, bool az = true, bool highlow = false, bool w = true)
         {
-            var items=await _productService.GetAllByCategoryAsync(category);
+            var items = await _productService.GetAllByCategoryAsync(category);
             int pageSize = 10;
 
             var model = new ProductListViewModel
             {
-                Products=items.Skip((page-1)*pageSize).Take(pageSize).ToList(),
-                PageSize=pageSize,
-                CurrentCategory=category,
-                CurrentPage=page,
-                PageCount=(int)Math.Ceiling(items.Count/(double)pageSize)
+                Products = items.Skip((page - 1) * pageSize).Take(pageSize).ToList(),
+                PageSize = pageSize,
+                CurrentCategory = category,
+                CurrentPage = page,
+                PageCount = (int)Math.Ceiling(items.Count / (double)pageSize),
+                IsAtoZ = az,
+                IsHighToLow = highlow,
+                Which = w
             };
             return View(model);
         }
+
+
+        public async Task<ActionResult> ChangeHighLow(int page = 1, int category = 0, bool az = true, bool highlow = false)
+        {
+            highlow = !highlow;
+            return RedirectToAction("Index", new { page, category, az, highlow, w = false });
+        }
+
+        public async Task<ActionResult> ChangeAtoZ(int page = 1, int category = 0, bool az = true, bool highlow = false)
+        {
+            az = !az;
+            return RedirectToAction("Index", new { page, category, az, highlow, w = true });
+        }
+
 
         // GET: ProductController/Details/5
         public ActionResult Details(int id)

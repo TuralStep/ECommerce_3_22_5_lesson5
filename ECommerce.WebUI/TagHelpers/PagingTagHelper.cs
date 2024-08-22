@@ -4,7 +4,7 @@ using System.Text;
 namespace ECommerce.WebUI.TagHelpers
 {
     [HtmlTargetElement("product-list-pager")]
-    public class PagingTagHelper:TagHelper
+    public class PagingTagHelper : TagHelper
     {
         [HtmlAttributeName("page-size")]
         public int PageSize { get; set; }
@@ -24,12 +24,26 @@ namespace ECommerce.WebUI.TagHelpers
             {
                 sb.Append("<ul class='pagination'>");
 
-                for (int i = 1; i <=PageCount; i++)
+                if (CurrentPage > 1)
+                {
+                    sb.Append("<li class='page-item'>");
+                    sb.AppendFormat("<a class='page-link' href='/product/index?page={0}&category={1}'> < </a>",
+                        CurrentPage - 1, CurrentCategory);
+                }
+
+                for (int i = 1; i <= PageCount; i++)
                 {
                     sb.AppendFormat("<li class='{0}'>", (i == CurrentPage) ? "page-item active" : "page-item");
                     sb.AppendFormat("<a  class='page-link' href='/product/index?page={0}&category={1}'> {2} </a>",
                         i, CurrentCategory, i);
                     sb.Append("</li>");
+                }
+
+                if (CurrentPage < PageCount)
+                {
+                    sb.Append("<li class='page-item'>");
+                    sb.AppendFormat("<a class='page-link' href='/product/index?page={0}&category={1}'> > </a>",
+                        CurrentPage + 1, CurrentCategory);
                 }
 
                 sb.Append("</ul>");

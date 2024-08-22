@@ -8,6 +8,40 @@ else
     <table class="table">
         <thead>
             <tr>
+                <th>
+                    @{
+                        var az = (Model.IsAtoZ) ? "A-Z" : "Z-A";
+                    }
+                    <a class="btn btn-xs btn-warning"
+                       asp-controller="Product"
+                       asp-action="ChangeAtoZ"
+                       asp-route-page="@Model.CurrentPage"
+                       asp-route-category="@Model.CurrentCategory"
+                       asp-route-az="@Model.IsAtoZ"
+                       asp-route-highlow="@Model.IsHighToLow">
+                        @az
+                    </a>
+                </th>
+                <th>
+                    @{
+                        var highlow = (Model.IsHighToLow) ? "Higher to lower" : "Lower to higher";
+                    }
+                    <a class="btn btn-xs btn-warning"
+                       asp-controller="Product"
+                       asp-action="ChangeHighLow"
+                       asp-route-page="@Model.CurrentPage"
+                       asp-route-category="@Model.CurrentCategory"
+                       asp-route-az="@Model.IsAtoZ"
+                       asp-route-highlow="@Model.IsHighToLow">
+                        @highlow
+                    </a>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <thead>
+            <tr>
                 <th>Product Name</th>
                 <th>Unit Price</th>
                 <th>UnitsInStock</th>
@@ -15,6 +49,22 @@ else
             </tr>
         </thead>
         <tbody>
+
+            @if (Model.Which)
+            {
+                @if (Model.IsAtoZ)
+                    Model.Products.Sort((x, y) => x.ProductName.CompareTo(y.ProductName));
+                else
+                    Model.Products.Sort((y, x) => x.ProductName.CompareTo(y.ProductName));
+            }
+            else
+            {
+                @if (Model.IsHighToLow)
+                    Model.Products.Sort((y, x) => x.UnitPrice.CompareTo(y.UnitPrice));
+                else
+                    Model.Products.Sort((x, y) => x.UnitPrice.CompareTo(y.UnitPrice));
+            }
+
             @foreach (var item in Model.Products)
             {
                 <tr>
