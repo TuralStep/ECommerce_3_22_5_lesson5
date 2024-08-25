@@ -44,10 +44,7 @@
     </header>
     <div class="container">
         <div class="row">
-            <div class="col-md-2">
-                @await Component.InvokeAsync("CategoryList")
-            </div>
-            <main role="main" class="pb-3 col-md-10">
+            <main role="main" class="pb-3">
                 @if (TempData["message"] != null)
                 {
                     <div class="alert alert-info animate__animated animate__bounceInLeft" role="alert">@TempData["message"]</div>
